@@ -26,6 +26,7 @@ export function PostCard({ data }: PostCardProps){
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openCommentModal, setOpenCommentModal] = useState(false);
     const [liked, setLiked] = useState(false);
+    const [commented, setCommented] = useState(false);
     const [likeCount, setLikeCount] = useState<number>();
     const [commentCount, setCommentCount] = useState<number>();
 
@@ -52,6 +53,8 @@ export function PostCard({ data }: PostCardProps){
       
         const unsubscribeComments = onSnapshot(commentsRef, (snapshot) => {
             setCommentCount(snapshot.size);
+            const userCommented = snapshot.docs.some((doc) => doc.id === uid);
+            setCommented(userCommented)
         });
         
         return () => {
@@ -101,7 +104,10 @@ export function PostCard({ data }: PostCardProps){
 
                 {data.img_url && (
                     <div className={styles.paddingBox}>
-                        <div className={styles.containerImg}>
+                        <div 
+                            className={styles.containerImg}
+                            onClick={() => uid && setOpenCommentModal(true)}
+                        >
                             <img src={data.img_url} alt="Post image" />
                         </div>
                     </div>
@@ -127,8 +133,9 @@ export function PostCard({ data }: PostCardProps){
                     </span>
                     <span>
                         <button 
-                            title='Open comment section'
                             onClick={handleComment}
+                            className={`${commented ? styles.commented : ''}`}
+                            title='Open comment section'
                         >
                             <IoMdChatboxes/>
                         </button>
@@ -167,8 +174,7 @@ export function PostCard({ data }: PostCardProps){
                 >
                     <CommentModal
                         onCancel={() => setOpenCommentModal(false)}
-                        idPost={data.id}
-                        postOwner={data.user.username}
+                        data={data}
                     />
                 </ModalStructure>
             )}

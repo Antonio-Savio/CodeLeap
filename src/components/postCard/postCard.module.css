@@ -50,6 +50,7 @@
     border-radius: 24px;
     max-height: 300px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .containerImg img {
@@ -57,6 +58,11 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    transition: 0.3s ease;
+}
+
+.containerImg img:hover {
+    transform: scale(1.05);
 }
 
 .card-info {
@@ -92,4 +98,8 @@
 
 .liked svg {
     color: var(--main-color)
+}
+
+.commented svg {
+    color: #47B960;
 }
