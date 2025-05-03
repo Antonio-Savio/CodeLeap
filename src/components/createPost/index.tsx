@@ -60,12 +60,11 @@ export function CreatePost(){
                 createdAt: new Date(),
             })
 
+            toast.success("Post successfully created!")
             setTitle("")
             setContent("")
             setPreviewImage("")
             setLoading(false);
-            navigate(0);
-            toast.success("Successfully created!")
         } catch (err) {
             toast.error("Could not create post. Try again later")
             setLoading(false);
