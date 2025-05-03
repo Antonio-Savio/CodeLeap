@@ -2,7 +2,6 @@ import { useState } from 'react';
 import styles from './editModal.module.css'
 import { Button } from '../../button'
 import { Input } from '../../input';
-import { useNavigate } from "react-router-dom";
 import { db } from '../../../services/firebaseConnection'
 import { doc, updateDoc } from 'firebase/firestore';
 
@@ -14,7 +13,6 @@ interface EditModalProps {
 }
 
 export function EditModal({ onCancel, editTitle, editContent, idPost }: EditModalProps){
-    const navigate = useNavigate()
     const [title, setTitle] = useState(editTitle);
     const [content, setContent] = useState(editContent);
 
@@ -28,7 +26,7 @@ export function EditModal({ onCancel, editTitle, editContent, idPost }: EditModa
             content
         })
         .then(() => {
-            navigate(0)
+            onCancel();
         })
     }
 
