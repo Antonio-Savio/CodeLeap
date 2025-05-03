@@ -23,6 +23,43 @@ export function Signin() {
     useEffect(() => {
         if (uid){
             navigate('/')
+        } else {
+            const toastId = toast((t) => (
+                <span style={{ display: "flex", gap: 10, flexDirection: 'column'}}>
+                    <p>Quick start with <b>johndoe</b></p>
+                    <div>
+                        <button 
+                            onClick={() => toast.dismiss(t.id)}
+                            style={{ padding: "4px 12px", borderRadius: 4 }}
+                        >
+                            Dismiss
+                        </button>
+                        <button 
+                            onClick={() => {
+                                toast.dismiss(t.id)
+                                setUsername("johndoe");
+                                setPassword("johndoe");
+                            }}
+                            style={{
+                                backgroundColor: "#22c55e",
+                                color: "#fff",
+                                border: "none",
+                                padding: "4px 16px",
+                                borderRadius: 4,
+                                fontWeight: 'bold',
+                                marginLeft: '8px'
+                            }}
+                        >
+                            OK
+                        </button>
+                    </div>
+                </span>
+            ), {
+                duration: 10000,
+                position: "bottom-center",
+            })
+
+            return () => toast.dismiss(toastId);
         }
     }, [uid])
 
