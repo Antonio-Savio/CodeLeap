@@ -24,6 +24,7 @@
 
 .buttons {
     display: flex;
+    line-height: 0;
 }
 
 .card-head button {
@@ -89,6 +90,7 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    line-height: 0;
 }
 
 .social-buttons button {

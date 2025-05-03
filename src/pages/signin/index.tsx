@@ -25,7 +25,7 @@ export function Signin() {
             navigate('/')
         } else {
             const toastId = toast((t) => (
-                <span style={{ display: "flex", gap: 10, flexDirection: 'column'}}>
+                <span style={{ display: "flex", gap: 10, flexDirection: 'column', alignItems: 'center'}}>
                     <p>Quick start with <b>johndoe</b></p>
                     <div>
                         <button 
