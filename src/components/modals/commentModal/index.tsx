@@ -10,11 +10,11 @@ import toast from "react-hot-toast";
 import { TbLoader } from "react-icons/tb";
 import { TbTrashXFilled } from "react-icons/tb";
 import { formatTime } from "../../../utils/time/formatTime";
+import { PostsProps } from '../../../pages/mainScreen';
 
 interface CommentModalProps {
     onCancel: () => void;
-    idPost: string;
-    postOwner: string;
+    data: PostsProps;
 }
 
 interface CommentProps{
@@ -24,7 +24,7 @@ interface CommentProps{
     commentedAt: Timestamp;
 }
 
-export function CommentModal({ onCancel, idPost, postOwner }: CommentModalProps){
+export function CommentModal({ onCancel, data }: CommentModalProps){
     const { uid, username } = useSelector((state: RootState) => state.user)
     
     const [comment, setComment] = useState("");
@@ -32,7 +32,7 @@ export function CommentModal({ onCancel, idPost, postOwner }: CommentModalProps)
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const commentsRef = collection(db, "posts", idPost, "comments");
+        const commentsRef = collection(db, "posts", data.id, "comments");
         const q = query(commentsRef, orderBy("commentedAt", "desc"));
 
         const unsubscribe = onSnapshot(q, (snap) => {
@@ -57,8 +57,8 @@ export function CommentModal({ onCancel, idPost, postOwner }: CommentModalProps)
         if (!uid || !username) return;
         setLoading(true);
 
-        const commentRef = doc(db, "posts", idPost, "comments", uid);
-        const postRef = doc(db, "posts", idPost)
+        const commentRef = doc(db, "posts", data.id, "comments", uid);
+        const postRef = doc(db, "posts", data.id)
 
         try {
             await setDoc(commentRef, {
@@ -83,7 +83,7 @@ export function CommentModal({ onCancel, idPost, postOwner }: CommentModalProps)
 
     async function handleDeleteComment() {
         if (!uid) return;
-        const docRef = doc(db, "posts", idPost, "comments", uid);
+        const docRef = doc(db, "posts", data.id, "comments", uid);
         
         await deleteDoc(docRef)
         .then(() => {
@@ -93,7 +93,30 @@ export function CommentModal({ onCancel, idPost, postOwner }: CommentModalProps)
 
     return(
         <section className={styles.container} onClick={(e) => e.stopPropagation()}>
-            <h2>Leave a comment on {postOwner}'s post</h2>
+            <div>
+                {data.img_url ? (
+                    <div className={styles.imageContainer}>
+                        <div className={styles.details}>
+                            <p>@{data.user.username} · {formatTime(data.createdAt.toDate())}</p>
+                            <h4>{data.title}</h4>
+                        </div>
+                        <img src={data.img_url} alt="Post image" />
+                    </div>
+                ) : (
+                    <div className={styles.postContainer}>
+                        <h4>{data.title}</h4>
+
+                        <div className={styles.cardInfo}>
+                            <p>@{data.user.username} · {formatTime(data.createdAt.toDate())}</p>
+                            <p className={styles.content}>
+                                {data.content}
+                            </p>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <h2>Leave a comment on {data.user.username}'s post</h2>
 
             <textarea 
                 placeholder="Comment here" 
