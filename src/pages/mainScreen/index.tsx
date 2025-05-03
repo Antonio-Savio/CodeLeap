@@ -5,7 +5,7 @@ import { Layout } from "../../components/Layout"
 import { PostCard } from "../../components/postCard"
 import { CreatePost } from "../../components/createPost"
 import { db } from "../../services/firebaseConnection"
-import { collection, getDocs, query, orderBy, Timestamp } from "firebase/firestore"
+import { collection, query, orderBy, Timestamp, onSnapshot } from "firebase/firestore"
 import { TbLoader } from "react-icons/tb"
 
 export interface PostsProps{
@@ -30,36 +30,31 @@ export function Home() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function getPosts(){
-            const postsRef = collection(db, "posts");
-            const q = query(postsRef, orderBy("createdAt", "desc"))
+        const postsRef = collection(db, "posts");
+        const q = query(postsRef, orderBy("createdAt", "desc"));
 
-            await getDocs(q)
-            .then((snapshot) => {
-                let list: PostsProps[] = [];
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            let list: PostsProps[] = [];
 
-                snapshot.forEach((doc) => {
-                    list.push({
-                        id: doc.id,
-                        title: doc.data().title,
-                        content: doc.data().content,
-                        user: doc.data().user,
-                        img_url: doc.data().img_url,
-                        createdAt: doc.data().createdAt,
-                        likes: doc.data().likes,
-                        comments: doc.data().comments
-                    })
-                })
+            snapshot.forEach((doc) => {
+            list.push({
+                id: doc.id,
+                title: doc.data().title,
+                content: doc.data().content,
+                user: doc.data().user,
+                img_url: doc.data().img_url,
+                createdAt: doc.data().createdAt,
+                likes: doc.data().likes,
+                comments: doc.data().comments
+            });
+            });
 
-                setPosts(list)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
-        }
+            setPosts(list);
+            setLoading(false);
+        });
 
-        getPosts();
-    }, [])
+        return () => unsubscribe();
+    }, []);
 
     return (
         <Layout>
