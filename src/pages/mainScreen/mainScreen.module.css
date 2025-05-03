@@ -1,0 +1,12 @@
+.loadContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px - 81.6px - 72px);
+}
+
+@media (max-width: 500px){
+    .loadContainer{
+        min-height: calc(100vh - 80px - 97.6px - 72px);
+    }
+}

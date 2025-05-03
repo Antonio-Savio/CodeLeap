@@ -1,0 +1,39 @@
+.button {
+    padding-inline: 28px;
+    height: 32px;
+    border-radius: 8px;
+    width: fit-content;
+    color: #fff;
+    transition: 0.3s ease;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
+
+.blue {
+    background-color: var(--main-color);    
+}
+
+.red {
+    background-color: #FF5151;
+}
+
+.green {
+    background-color: #47B960;
+}
+
+.cancel {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #999999;
+}
+
+.button.disabled {
+    cursor: not-allowed;
+    background-color: #999999;
+}

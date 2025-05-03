@@ -1,0 +1,95 @@
+.card-box {
+    margin-top: 24px;
+    border-radius: 16px;
+    border: 1px solid #999999;
+    overflow: hidden;
+    font-size: 18px;
+}
+
+.card-head {
+    display: flex;
+    padding: 24px;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+.card-head h2 {
+    font-size: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.buttons {
+    display: flex;
+}
+
+.card-head button {
+    all: unset;
+    margin-left: 22px;
+    cursor: pointer;
+}
+
+.card-box svg {
+    font-size: 22px;
+    transition: 0.3s ease;
+}
+
+.card-box svg:hover {
+    opacity: 0.8;
+}
+
+.paddingBox {
+    padding: 24px 24px 0;
+}
+
+.containerImg {
+    width: 100%;
+    border-radius: 24px;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.containerImg img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.card-info {
+    padding: 24px 24px 16px;
+    display: flex;
+    justify-content: space-between;
+    color: #777777;
+}
+
+.content {
+    padding: 0 24px 16px;
+    white-space: pre-line;
+}
+
+.social-buttons {
+    color: #999999;
+    margin-bottom: 24px;
+    margin-left: 24px;
+    display: flex;
+    gap: 22px;
+}
+
+.social-buttons span {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.social-buttons button {
+    all: unset;
+    cursor: pointer;
+}
+
+.liked svg {
+    color: var(--main-color)
+}
