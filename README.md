@@ -1,9 +1,13 @@
 # CodeLeap Network - Frontend Challenge
 
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) ![CSS Modules](https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge&logo=css3&logoColor=white) ![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white) ![React Router](https://img.shields.io/badge/React%20Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+
 This project is a solution for the CodeLeap Frontend Developer assessment. It's a simple social network interface allowing users to sign up (using a username), create, read, edit, and delete posts, closely following the provided design specifications. This implementation goes beyond the core requirements by incorporating several bonus features using React, TypeScript and Firebase.
 
 ## Link to Live Demo
-[CodeLeap Front-end test](https://code-leap-bice.vercel.app/)
+*   [CodeLeap Front-end test](https://code-leap-bice.vercel.app/)
+
+---
 
 ## Preview
 <img src="./src/assets/codeleap.webp" alt="Gif demonstrating features" />
@@ -35,10 +39,11 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
     *   Users can delete their own comments (indicated by a trash icon next to their comments).
 *   **Image Uploads:** Users can optionally attach an image when creating a post. Images are uploaded and hosted on Cloudinary.
 *   **"My Posts" Page:** A dedicated view showing only the posts created by the currently logged-in user.
-*   **Fully Responsive Design:** The interface adapts seamlessly to various screen sizes, ensuring usability on both desktop and mobile devices.
-*   **Loading Indicators:** Visual feedback (spinners/loaders) is provided during asynchronous operations like fetching data or submitting forms.
-*   **User Feedback Toasts:** Non-intrusive notifications (toasts) inform the user about the success or failure of actions (e.g., post created, error deleting).
-*   **Cloudinary Integration:** Efficiently handles image storage and retrieval.
+*   **Fully Responsive Design:** The interface adapts to various screen sizes, ensuring usability on both desktop and mobile devices.
+*   **Loading Indicators & Toasts:** Provides visual feedback for async operations and actions.
+*   **Cloudinary Integration:** handles image storage and retrieval.
+*   **Protected Actions:** Unauthenticated users attempting to Like, Comment, or Create a Post are redirected to the Sign In page.
+*   **Route Protection:** Authenticated users attempting to access Sign In or Sign Up pages are redirected to the main feed.
 
 ---
 
@@ -59,24 +64,19 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
 ## Project Structure
 
 ```bash
-├── .env.example # Environment variable template
-├── .gitignore
-├── README.md
 ├── index.html # Main HTML entry point
-├── package.json
 ├── src
 │ ├── App.tsx # Main application component & routing setup
 │ ├── assets/ # Static assets (images, etc.)
 │ ├── components/ # Reusable UI components (Button, Input, Modals, PostCard, etc.)
 │ ├── pages/ # Page-level components (MainScreen, MyPosts, Signin, Signup)
 │ ├── routes/ # Routing configuration
-│ ├── services/ # API/external service connections (Firebase)
+│ ├── services/ # external service connections (Firebase)
 │ ├── store/ # Global state (Redux Toolkit)
 │ ├── utils/ # Helper functions (time formatting, etc.)
 │ ├── main.tsx # Application entry point
 │ └── index.css # Global styles
 ├── tsconfig.json # Base TypeScript configuration
-└── vite.config.ts # Vite build tool configuration
 ```
 
 ---
@@ -111,8 +111,6 @@ Follow these instructions to set up and run the project locally.
     Create a `.env` file in the root directory, and fill in your Firebase and Cloudinary credentials.
 
     ```bash
-    # .env.example
-
     # Firebase Configuration
     VITE_FIREBASE_API_KEY=YOUR_FIREBASE_API_KEY
     VITE_FIREBASE_AUTH_DOMAIN=YOUR_FIREBASE_AUTH_DOMAIN
