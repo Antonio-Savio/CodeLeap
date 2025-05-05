@@ -90,6 +90,9 @@
 
 .details h4 {
     font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .container h2 {
