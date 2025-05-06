@@ -5,13 +5,16 @@ import { ChangeEvent, useState } from "react"
 import { Input } from "../../components/input"
 import { db } from "../../services/firebaseConnection"
 import { collection, addDoc } from "firebase/firestore"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "../../store"
+import { addPost } from '../../store/postSlice'
 import { TbUpload, TbLoader } from "react-icons/tb";
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { api } from '../../services/api'
 
 export function CreatePost(){
+    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
     const navigate = useNavigate()
 
@@ -48,18 +51,28 @@ export function CreatePost(){
         }
 
         try {
-            await addDoc(collection(db, "posts"), {
-                user: {
-                    uid: user.uid,
-                    username: user.username,
-                    email: user.email
-                },
-                title: title,
-                content: content,
-                img_url: uploadedImgUrl || null,
-                createdAt: new Date(),
+            const res = await api.post('/', {
+                username: user.username,
+                title,
+                content
+            });
+
+            const postId = res.data.id;
+
+            const docRef = await addDoc(collection(db, "posts"), {
+                user_uid: user.uid,
+                postId,
+                img_url: uploadedImgUrl || null
             })
 
+            const newPost = {
+                ...res.data,
+                docId: docRef.id,
+                user_uid: user.uid,
+                img_url: uploadedImgUrl || ''
+            }
+
+            dispatch(addPost(newPost));
             toast.success("Post successfully created!")
             setTitle("")
             setContent("")

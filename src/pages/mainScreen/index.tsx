@@ -5,55 +5,59 @@ import { Layout } from "../../components/Layout"
 import { PostCard } from "../../components/postCard"
 import { CreatePost } from "../../components/createPost"
 import { db } from "../../services/firebaseConnection"
-import { collection, query, orderBy, Timestamp, onSnapshot } from "firebase/firestore"
+import { collection, getDocs } from "firebase/firestore"
 import { TbLoader } from "react-icons/tb"
-
-export interface PostsProps{
-    id: string;
-    title: string;
-    content: string;
-    user: UserProps;
-    img_url: string;
-    createdAt: Timestamp;
-    likes: number;
-    comments: number
-}
-
-interface UserProps{
-    uid: string;
-    email: string;
-    username: string;
-}
+import { api } from "../../services/api"
+import { useSelector, useDispatch } from "react-redux"
+import { setPosts, ApiResponse } from "../../store/postSlice"
+import { RootState } from "../../store"
 
 export function Home() {
-    const [posts, setPosts] = useState<PostsProps[]>([]);
+    const { posts } = useSelector((state: RootState) => state.posts);
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const postsRef = collection(db, "posts");
-        const q = query(postsRef, orderBy("createdAt", "desc"));
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            let list: PostsProps[] = [];
-
-            snapshot.forEach((doc) => {
-            list.push({
-                id: doc.id,
-                title: doc.data().title,
-                content: doc.data().content,
-                user: doc.data().user,
-                img_url: doc.data().img_url,
-                createdAt: doc.data().createdAt,
-                likes: doc.data().likes,
-                comments: doc.data().comments
-            });
-            });
-
-            setPosts(list);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
+        async function getPosts() {
+            setLoading(true);
+    
+            try {
+                const res = await api.get('/');
+                const apiPosts = res.data.results;
+               
+                const postsRef = collection(db, "posts");
+                const snapshot = await getDocs(postsRef);
+    
+                const firestoreMap = new Map<string, any>();
+    
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    firestoreMap.set(data.postId, {
+                        docId: doc.id,
+                        img_url: data.img_url || '',
+                        user_uid: data.user_uid
+                    });
+                });
+    
+                const enrichedPosts = apiPosts.map((post: ApiResponse) => {
+                    const firestoreData = firestoreMap.get(post.id);
+                    return {
+                        ...post,
+                        docId: firestoreData?.docId,
+                        img_url: firestoreData?.img_url || '',
+                        user_uid: firestoreData?.user_uid
+                    };
+                });
+    
+                dispatch(setPosts(enrichedPosts));
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    
+        getPosts();
     }, []);
 
     return (
@@ -64,12 +68,20 @@ export function Home() {
                     <TbLoader className={animate.loader} />
                 </div>
             ) : (
-                posts.map( post => (
-                    <PostCard 
-                        key={post.id}
-                        data={post}
-                    />
-                ))
+                <>
+                    {posts.length === 0 && (
+                        <p className={styles.warn}>
+                            Network is empty.
+                        </p>
+                    )}
+                    {posts.map( post => (
+                        <PostCard 
+                            key={post.id}
+                            data={post}
+                        />
+                    ))}
+                </>
+
 
             )}
         </Layout>

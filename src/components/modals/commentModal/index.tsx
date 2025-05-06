@@ -32,7 +32,7 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const commentsRef = collection(db, "posts", data.id, "comments");
+        const commentsRef = collection(db, "posts", data.docId, "comments");
         const q = query(commentsRef, orderBy("commentedAt", "desc"));
 
         const unsubscribe = onSnapshot(q, (snap) => {
@@ -57,8 +57,8 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
         if (!uid || !username) return;
         setLoading(true);
 
-        const commentRef = doc(db, "posts", data.id, "comments", uid);
-        const postRef = doc(db, "posts", data.id)
+        const commentRef = doc(db, "posts", data.docId, "comments", uid);
+        const postRef = doc(db, "posts", data.docId)
 
         try {
             await setDoc(commentRef, {
@@ -83,7 +83,7 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
 
     async function handleDeleteComment() {
         if (!uid) return;
-        const docRef = doc(db, "posts", data.id, "comments", uid);
+        const docRef = doc(db, "posts", data.docId, "comments", uid);
         
         await deleteDoc(docRef)
         .then(() => {
@@ -97,7 +97,7 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
                 {data.img_url ? (
                     <div className={styles.imageContainer}>
                         <div className={styles.details}>
-                            <p>@{data.user.username} · {formatTime(data.createdAt.toDate())}</p>
+                            <p>@{data.username} · {formatTime(new Date(data.created_datetime))}</p>
                             <h4>{data.title}</h4>
                         </div>
                         <img src={data.img_url} alt="Post image" />
@@ -107,7 +107,7 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
                         <h4>{data.title}</h4>
 
                         <div className={styles.cardInfo}>
-                            <p>@{data.user.username} · {formatTime(data.createdAt.toDate())}</p>
+                            <p>@{data.username} · {formatTime(new Date(data.created_datetime))}</p>
                             <p className={styles.content}>
                                 {data.content}
                             </p>
@@ -116,7 +116,7 @@ export function CommentModal({ onCancel, data }: CommentModalProps){
                 )}
             </div>
 
-            <h2>Leave a comment on {data.user.username}'s post</h2>
+            <h2>Leave a comment on {data.username}'s post</h2>
 
             <textarea 
                 placeholder="Comment here" 

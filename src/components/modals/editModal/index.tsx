@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import styles from './editModal.module.css'
+import animate from '../../../utils/styles/spinAnimation.module.css'
 import { Button } from '../../button'
 import { Input } from '../../input';
-import { db } from '../../../services/firebaseConnection'
-import { doc, updateDoc } from 'firebase/firestore';
+import { api } from '../../../services/api';
+import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { updatePost } from '../../../store/postSlice'
+import { TbLoader } from 'react-icons/tb';
 
 interface EditModalProps {
     onCancel: () => void;
@@ -13,21 +17,35 @@ interface EditModalProps {
 }
 
 export function EditModal({ onCancel, editTitle, editContent, idPost }: EditModalProps){
+    const dispatch = useDispatch();
     const [title, setTitle] = useState(editTitle);
     const [content, setContent] = useState(editContent);
+    const [loading, setLoading] = useState(false);
 
     async function handleEdit(e: React.FormEvent<HTMLFormElement>){
-        e.preventDefault()
-        
-        const docRef = doc(db, "posts", idPost)
+        e.preventDefault();
+        setLoading(true);
 
-        await updateDoc(docRef, {
-            title,
-            content
-        })
-        .then(() => {
+        if (!title || !content) return;
+
+        try {
+            await api.patch(`/${idPost}/`, {
+                title,
+                content
+            });
+
             onCancel();
-        })
+            dispatch(updatePost({
+                id: idPost,
+                title,
+                content
+            }))
+            toast.success("Post updatated!");
+        } catch (err) {
+            toast.success("Error updatating post");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return(
@@ -59,7 +77,7 @@ export function EditModal({ onCancel, editTitle, editContent, idPost }: EditModa
                         Cancel
                     </Button>
                     <Button  color="green" type="submit">
-                        Save
+                        {loading ? <TbLoader className={animate.loader} /> : 'Save'}
                     </Button>
                 </div>
             </form>

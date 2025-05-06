@@ -7,7 +7,7 @@ import { DeleteModal } from '../modals/deleteModal';
 import { EditModal } from '../modals/editModal';
 import { useSelector } from 'react-redux'
 import type { RootState } from '../../store';
-import { PostsProps } from '../../pages/mainScreen';
+import { PostsProps } from "../../store/postSlice"
 import { doc, setDoc, deleteDoc, getDoc, onSnapshot, collection } from "firebase/firestore";
 import { db } from '../../services/firebaseConnection';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ import { CommentModal } from '../modals/commentModal';
 import { formatTime } from '../../utils/time/formatTime';
 
 interface PostCardProps{
-    data: PostsProps;
+    data: PostsProps
 }
 
 export function PostCard({ data }: PostCardProps){
@@ -32,7 +32,7 @@ export function PostCard({ data }: PostCardProps){
 
     useEffect(() => {
         if (uid) {
-            const likesRef = collection(db, "posts", data.id, "likes");
+            const likesRef = collection(db, "posts", data.docId, "likes");
 
             const unsubscribe = onSnapshot(likesRef, (snapshot) => {
                 const userLiked = snapshot.docs.some((doc) => doc.id === uid);
@@ -44,13 +44,13 @@ export function PostCard({ data }: PostCardProps){
     }, [])
 
     useEffect(() => {
-        const likesRef = collection(db, "posts", data.id, "likes");
-        const commentsRef = collection(db, "posts", data.id, "comments");
-      
+        const likesRef = collection(db, "posts", data.docId, "likes");
+        const commentsRef = collection(db, "posts", data.docId, "comments");
+        
         const unsubscribeLikes = onSnapshot(likesRef, (snapshot) => {
             setLikeCount(snapshot.size);
         });
-      
+        
         const unsubscribeComments = onSnapshot(commentsRef, (snapshot) => {
             setCommentCount(snapshot.size);
             const userCommented = snapshot.docs.some((doc) => doc.id === uid);
@@ -61,11 +61,12 @@ export function PostCard({ data }: PostCardProps){
             unsubscribeLikes();
             unsubscribeComments();
         };
-    }, [data.id]);
+
+    }, []);
     
     async function toggleLike() {
         if (uid) {
-            const likeRef = doc(db, "posts", data.id, "likes", uid);
+            const likeRef = doc(db, "posts", data.docId, "likes", uid);
 
             const docSnap = await getDoc(likeRef);
           
@@ -94,7 +95,7 @@ export function PostCard({ data }: PostCardProps){
             <section className={styles['card-box']}>
                 <div className={styles['card-head']}>
                     <h2>{data.title}</h2>
-                    {data.user.uid === uid && (
+                    {data.user_uid === uid && (
                         <div className={styles.buttons}>
                             <button onClick={() => setOpenDeleteModal(true)}><TbTrashXFilled/></button>
                             <button onClick={() => setOpenEditModal(true)}><TbEdit/></button>
@@ -114,8 +115,8 @@ export function PostCard({ data }: PostCardProps){
                 )}
 
                 <div className={styles['card-info']}>
-                    <p>@{data.user.username}</p>
-                    <p>{formatTime(data.createdAt.toDate())}</p>
+                    <p>@{data.username}</p>
+                    <p>{formatTime(new Date(data.created_datetime))}</p>
                 </div>
                 <p className={styles.content}>
                     {data.content}
@@ -149,7 +150,8 @@ export function PostCard({ data }: PostCardProps){
                     onCancel={() => setOpenDeleteModal(false)}
                 >
                     <DeleteModal 
-                        idPost={data.id} 
+                        postId={data.id}
+                        docId={data.docId}
                         onCancel={() => setOpenDeleteModal(false)} 
                     />
                 </ModalStructure>
