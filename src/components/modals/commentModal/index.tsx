@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import { TbLoader } from "react-icons/tb";
 import { TbTrashXFilled } from "react-icons/tb";
 import { formatTime } from "../../../utils/time/formatTime";
-import { PostsProps } from '../../../pages/mainScreen';
+import { PostsProps } from "../../../store/postSlice"
 
 interface CommentModalProps {
     onCancel: () => void;
