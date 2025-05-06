@@ -2,7 +2,7 @@
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white) ![CSS Modules](https://img.shields.io/badge/CSS%20Modules-000000?style=for-the-badge&logo=css3&logoColor=white) ![Redux](https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white) ![React Router](https://img.shields.io/badge/React%20Router-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white) ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 
-This project is a solution for the CodeLeap Frontend Developer assessment. It's a simple social network interface allowing users to sign up (using a username), create, read, edit, and delete posts, closely following the provided design specifications. This implementation goes beyond the core requirements by incorporating several bonus features using React, TypeScript and Firebase.
+This project is a solution for the CodeLeap Frontend Developer assessment. It's a simple social network interface allowing users to sign up (using a username), create, read, edit, and delete posts by integrating with the official CodeLeap test API (`https://dev.codeleap.co.uk/careers/`). The application is enhanced with Firebase for user authentication and Cloudinary for image uploads, fulfilling bonus requirements alongside the core specifications. Built with React, TypeScript, and adhering closely to the provided designs.
 
 ## Link to Live Demo
 *   [CodeLeap Front-end test](https://code-leap-bice.vercel.app/)
@@ -19,7 +19,7 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
 ### Core Requirements Implemented:
 
 *   **Signup:** Simple username entry screen, adhering to the design, with the "Enter" button disabled until a username is typed. (Enhanced with Firebase Auth - see Bonus Features).
-*   **Post Creation:** Users can create new posts using a form with "Title" and "Content" fields. The "Create" button is disabled if either field is empty, matching the design specification.
+*   **Post Creation:** Users can create new posts (Title, Content) which are sent to the [CodeLeap API](https://dev.codeleap.co.uk/careers/). Button disabled if fields are empty.
 *   **Post Feed:** Fetches and displays posts from the backend (Firebase).
 *   **Real-time Updates:** The post list updates automatically when a new post is created.
 *   **Post Sorting:** Posts are displayed with the most recent ones first.
@@ -31,13 +31,13 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
 ### Bonus Features & Enhancements:
 
 *   **Firebase Authentication:** Replaced simple username persistence with robust email/password authentication via Firebase Auth for a more realistic login/logout solution.
-*   **Firebase Firestore:** Used as the backend database to store and retrieve posts and comments in real-time.
+*   **Firebase Firestore:** Used as a database to store `images URL`, `likes` and `comments`, integrating with the provided test server API.
 *   **Like/Unlike Posts:** Users can like and unlike posts, with counts updated visually.
 *   **Real-time Comments:**
-    *   Users can view and add comments to posts within a dedicated modal.
-    *   Comments appear in real-time for all users viewing the post.
+    *   Users can view and add comments to posts within a modal.
+    *   Comments appear in real-time.
     *   Users can delete their own comments (indicated by a trash icon next to their comments).
-*   **Image Uploads:** Users can optionally attach an image when creating a post. Images are uploaded and hosted on Cloudinary.
+*   **Image Uploads:** Users can optionally attach an image when creating a post. Images are uploaded and hosted on Cloudinary, URL is stored in Firebase.
 *   **"My Posts" Page:** A dedicated view showing only the posts created by the currently logged-in user.
 *   **Fully Responsive Design:** The interface adapts to various screen sizes, ensuring usability on both desktop and mobile devices.
 *   **Loading Indicators & Toasts:** Provides visual feedback for async operations and actions.
@@ -51,9 +51,11 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
 
 *   **Frontend:** React
 *   **Language:** TypeScript
+*   **API Integration:** Axios
 *   **Styling:** CSS Modules
 *   **State Management:** Redux Toolkit
-*   **Backend & Database:** Firebase (Authentication, Firestore)
+*   **Authentication:** Firebase Authentication
+*   **Database (for Bonus Features):** Firebase Firestore
 *   **Image Hosting:** Cloudinary
 *   **Routing:** React Router DOM
 *   **Build Tool:** Vite
@@ -71,7 +73,7 @@ This project is a solution for the CodeLeap Frontend Developer assessment. It's 
 │ ├── components/ # Reusable UI components (Button, Input, Modals, PostCard, etc.)
 │ ├── pages/ # Page-level components (MainScreen, MyPosts, Signin, Signup)
 │ ├── routes/ # Routing configuration
-│ ├── services/ # external service connections (Firebase)
+│ ├── services/ # external service connections (CodeLeap API and Firebase)
 │ ├── store/ # Global state (Redux Toolkit)
 │ ├── utils/ # Helper functions (time formatting, etc.)
 │ ├── main.tsx # Application entry point
@@ -139,6 +141,7 @@ Follow these instructions to set up and run the project locally.
 
 ## Project Highlights (Addressing Assessment Criteria)
 
+*   **Core API Integration:** Successfully integrated with the required CodeLeap test API for all core post CRUD operations.
 *   **Design Adherence:** Closely matches the provided mockups, including component states (disabled buttons, modals) and layout.
 *   **User Experience:** Intuitive interface with clear feedback (loaders, toasts) and conditional logic (edit/delete icons) enhancing usability.
 *   **Responsiveness:** Fully responsive design ensures usability across various devices.
